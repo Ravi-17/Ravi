@@ -1,0 +1,169 @@
+ #EMISSION ANALYSIS
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('City Drive 2.csv')
+pollutedArea=[]
+time=[]
+time1=[]
+    
+Emission_Co2=list(df.iloc[:,27])
+time=list(df.iloc[:,1])
+    #print(Emission_Co2)
+    
+r= len(Emission_Co2)
+    
+for i in range(0,r):
+    if Emission_Co2[i]=='-':
+        Emission_Co2[i]='0'
+    if float(Emission_Co2[i])>200.0:
+        pollutedArea.append(Emission_Co2[i])
+        time1.append(time[i])
+            
+    #print("\npolluted area:")
+    #print(pollutedArea)
+        
+plt.scatter(pollutedArea, time1, color="r")
+#plt.xlabel("time")
+#plt.ylabel("polluted area")
+plt.title("Co emission")
+plt.legend()
+plt.show()
+
+
+
+
+
+# TRAFFIC DATA ANALYSIS
+
+DF = pd.read_csv('City Drive 2.csv')
+engine_load = DF["Engine Load(%)"].replace(to_replace="-", value="0")
+engine_rpm = DF["Engine RPM(rpm)"].replace(to_replace="-", value="0")
+for i in range(0, len(engine_load)):
+  engine_load[i] = float(engine_load[i])
+
+for j in range(0, len(engine_rpm)):
+  engine_rpm[j] = float(engine_rpm[j])
+
+  maxinload = 0
+for i in range(len(engine_load)):
+  if maxinload < engine_load[i]:
+    maxinload = engine_load[i]
+    load_threshold = 0.4 * maxinload
+    maxinrpm = 0
+for j in range(len(engine_rpm)):
+  if maxinrpm < engine_rpm[j]:
+   maxinrpm = engine_rpm[j]
+
+  rpm_threshold = 0.4 * maxinrpm
+  counter_overload = 0
+for i in range(len(engine_rpm)):
+  if engine_load[i] > load_threshold and  engine_rpm[i] > rpm_threshold:
+    counter_overload = counter_overload + 1
+
+if counter_overload < 200:
+        print("Load is correct")
+else:
+        print(">>>Overload\n\n")
+
+#FUEL EFFECIENCY
+
+   
+DF=pd.read_csv('City Drive 2.csv')
+dist = DF['Trip Distance(km)']
+final = dist.iloc[-1]
+final = float(final)
+print("The total distance covered:", final)
+fuel = DF['Fuel Remaining (Calculated from vehicle profile)(%)']
+rem_fuel = fuel.iloc[-1]
+rem_fuel = float(rem_fuel)
+used = 100 - rem_fuel
+used = used/100
+print("fuel used:", used)
+kmpl = DF["Kilometers Per Litre(Instant)(kpl)"].replace(to_replace='-', value='0')
+for i in range(len(kmpl)):
+    kmpl[i] = float(kmpl[i])
+x = kmpl.mean()
+print("kpl avg:", x)
+x = x*used
+print("exp distance", x)
+diff = x-final
+print(diff)
+
+
+
+
+#Engine load analysis
+
+
+
+DF = pd.read_csv('City Drive 2.csv')
+engine_load = DF["Engine Load(%)"].replace(to_replace="-", value="0")
+engine_rpm = DF["Engine RPM(rpm)"].replace(to_replace="-", value="0")
+for i in range(0, len(engine_load)):
+      engine_load[i] = float(engine_load[i])
+
+for j in range(0, len(engine_rpm)):
+      engine_rpm[j] = float(engine_rpm[j])
+
+      maxinload = 0
+for i in range(len(engine_load)):
+       if maxinload < engine_load[i]:
+          maxinload = engine_load[i]
+          load_threshold = 0.4 * maxinload
+          maxinrpm = 0
+for j in range(len(engine_rpm)):
+      if maxinrpm < engine_rpm[j]:
+          maxinrpm = engine_rpm[j]
+
+rpm_threshold = 0.4 * maxinrpm
+counter_overload = 0
+for i in range(len(engine_rpm)):
+      if engine_load[i] > load_threshold and  engine_rpm[i] > rpm_threshold:
+           counter_overload = counter_overload + 1
+
+if counter_overload < 200:
+        print("Load is correct")
+else:
+        print("\n\n\n>>>Overload\n\n")
+
+
+
+#SPEED VIOLATION ANALYSIS
+
+import osmapi
+
+import gmplot
+import os
+SPEED_VIOLATION = []
+LEVEL=[]
+GPS_TIME = []
+LONGITUDE_DATA = [] 
+LATITUDE_DATA = []
+SPEED = []
+df = pd.read_csv("City Drive 2.csv")
+Longitude=df[" Longitude"]
+Latitude=df[" Latitude"]
+level =df[" G(z)"]
+speed=df["Speed (GPS)(km/h)"]
+GpsTime=df["GPS Time"]
+for i in df.index:
+    if (speed[i]>50):
+        SPEED_VIOLATION.append([df[' Latitude'][i],df[' Longitude'][i]])
+        GPS_TIME.append(GpsTime[i])
+        LONGITUDE_DATA.append(Longitude[i])
+        LATITUDE_DATA.append(Latitude[i])
+x = LONGITUDE_DATA      
+y = LATITUDE_DATA 
+plt.scatter(x,y, label = 'Speed',color = 'b')
+plt.scatter(x,y,label='level',color='r') 
+plt.xlabel('Longitude') 
+plt.ylabel('Latitude') 
+plt.title('Speed Violation')
+plt.legend() 
+plt.show()
+gmap1 = gmplot.GoogleMapPlotter(17.46,78.377, 13)
+gmap1.heatmap(LATITUDE_DATA,LONGITUDE_DATA)
+gmap1.draw("Libraries\Documents\map1.html")
